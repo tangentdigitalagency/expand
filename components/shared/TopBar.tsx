@@ -1,8 +1,16 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { SignedIn } from '@clerk/nextjs/app-beta'
-import { OrganizationSwitcher, SignOutButton } from '@clerk/nextjs' 
-import {dark} from '@clerk/themes'
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  UserProfile
+} from "@clerk/nextjs";import { OrganizationSwitcher, SignOutButton } from '@clerk/nextjs' 
+import { dark } from '@clerk/themes'
+import User from '@/lib/models/user.model';
+
 function TopBar() {
   
   return (
@@ -21,15 +29,22 @@ function TopBar() {
             </SignOutButton>
           </SignedIn>
         </div>
-        <OrganizationSwitcher
-          
+        <UserButton
+          afterSignOutUrl="/"
+          userProfileMode='modal'
+          showName={true}
+         
           appearance={{
             baseTheme: dark,
-            elements: {
-              orginizationSwitcherTrigger: "py-2 px-4"
-            }
+            layout: {
+              shimmer: true,
+           }
+            
           }}
+
         />
+        <p className='text-white'>{}</p>
+
       </div>
     </nav>
   )
