@@ -141,6 +141,7 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
+              <FormMessage className='text-base-semibold text-gray-200'/>
            
             </FormItem>
           )}
@@ -163,7 +164,8 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
 
                 />
               </FormControl>
-           
+              <FormMessage className='text-base-semibold text-gray-200'/>
+
             </FormItem>
           )}
         />
@@ -185,7 +187,8 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
 
                 />
               </FormControl>
-           
+              <FormMessage className='text-base-semibold text-gray-200'/>
+
             </FormItem>
           )}
         />
@@ -206,7 +209,8 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
                   {...field}
                 />
               </FormControl>
-           
+              <FormMessage className='text-base-semibold text-gray-200'/>
+
             </FormItem>
           )}
         />
