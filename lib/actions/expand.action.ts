@@ -38,3 +38,78 @@ export async function createExpansion({ text, author, communityId, path }: Param
   
 
 }
+
+export async function fetchPosts(pageNumber = 1, pageSize = 20) {
+  
+  connectToDB();
+
+  const skipAmount = (pageNumber - 1) * pageSize;
+  const postsQuery = Expand.find({
+    parentId: {
+      $in: [null, undefined]
+    }
+  })
+    .sort({ createdAt: 'desc' })
+    .skip(skipAmount)
+    .limit(pageSize)
+    .populate({
+      path: 'author',
+      model: User,
+    })
+    .populate({
+      path: 'children',
+      populate: {
+        path: 'author',
+        model: User,
+        select: "_id name parentId image"
+      }
+    })
+  
+  const totalPostCount = await Expand.countDocuments({ parentId: { $in: [null, undefined] } })
+  
+  const posts = await postsQuery.exec();
+
+  const isNext = totalPostCount > pageNumber + posts.length;
+
+  return { posts, isNext }
+
+}
+
+export async function fetchExpandById(id: string) {
+
+  connectToDB();
+
+  try {
+
+    //TODO: Populate Community
+    const expand = await Expand.findById(id)
+      .populate({
+        path: 'author',
+        model: User,
+        select: '_id id name image'
+      })
+      .populate({
+        path: 'children',
+        populate: [
+          {
+            path: 'author',
+            model: User,
+            select: '_id id name parentId image'
+          },
+          {
+            path: 'children',
+            model: Expand,
+            populate: {
+              path: 'author',
+              model: User,
+              select: '_id id name parentId image'
+            }
+          }
+        ]
+      }).exec();
+    
+    return expand;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch expansion: ${error.message}`)
+  }
+}
